@@ -1,0 +1,5 @@
+- name: Sync directories from master to workers
+  hosts: all
+  become: true
+  roles:
+    - rsync
