@@ -1,4 +1,25 @@
 ---
+# set_permissions.yml
+- name: Ensure correct permissions on rsync source directory
+  ansible.builtin.file:
+    path: "{{ rsync_source_dir }}"
+    state: directory
+    owner: "{{ rsync_source_dir_owner }}"
+    group: "{{ rsync_source_dir_group }}"
+    mode: "{{ rsync_source_dir_mode }}"
+  become: true
+  when: ansible_hostname != groups['worker'][0]
+
+- name: Ensure correct permissions on rsync destination directory
+  ansible.builtin.file:
+    path: "{{ rsync_dest_dir }}"
+    state: directory
+    owner: "{{ rsync_dest_dir_owner }}"
+    group: "{{ rsync_dest_dir_group }}"
+    mode: "{{ rsync_dest_dir_mode }}"
+  become: true
+  when: ansible_hostname != groups['master'][0]
+
 - name: Add Rsync cron job for workers
   ansible.builtin.cron:
     name: "Rsync cron job"
